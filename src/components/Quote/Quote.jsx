@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Quote.css'
 
 function Quote({ onLoaded }) {
     const [quote, setQuote] = useState('')
     const [author, setAuthor] = useState('')
+    const isFirstRender = useRef(true)
 
     const categories = [
         'inspirational',
@@ -15,7 +16,6 @@ function Quote({ onLoaded }) {
 
     const fetchQuote = async () => {
         try {
-            // Randomly select a category
             const randomCategory = categories[Math.floor(Math.random() * categories.length)]
             const response = await fetch(`https://api.api-ninjas.com/v1/quotes?category=${randomCategory}`, {
                 headers: {
@@ -28,7 +28,6 @@ function Quote({ onLoaded }) {
             onLoaded()
         } catch (error) {
             console.error('Error fetching quote:', error)
-            // Fallback motivational quotes if API fails
             const fallbackQuotes = [
                 { quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
                 { quote: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
@@ -43,10 +42,12 @@ function Quote({ onLoaded }) {
     }
 
     useEffect(() => {
-        fetchQuote()
-        // Fetch new quote every 30 minutes (1800000 milliseconds)
-        const interval = setInterval(fetchQuote, 1800000)
-        return () => clearInterval(interval)
+        if (isFirstRender.current) {
+            isFirstRender.current = false
+            fetchQuote()
+            const interval = setInterval(fetchQuote, 1800000)
+            return () => clearInterval(interval)
+        }
     }, [])
 
     return (
