@@ -19,6 +19,7 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
     }, [position])
 
     const handleStart = (clientX, clientY) => {
+        event.preventDefault();
         startPos.current = { x: clientX, y: clientY }
         dragStart.current = {
             x: clientX - position.x,
@@ -41,13 +42,17 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
         }
     }
 
-    const handleEnd = (clientX, clientY) => {
+    const handleEnd = (clientX, clientY, isTouch = false) => {
         if (isDragging) {
             const deltaX = Math.abs(clientX - startPos.current.x)
             const deltaY = Math.abs(clientY - startPos.current.y)
 
-            if (deltaX < moveThreshold && deltaY < moveThreshold) {
-                handleTogglePlay()
+            const touchThreshold = isTouch ? 15 : moveThreshold;
+
+            if (deltaX < touchThreshold && deltaY < touchThreshold) {
+                setTimeout(() => {
+                    handleTogglePlay();
+                }, isTouch ? 50 : 0);
             }
         }
         setIsDragging(false)
@@ -66,28 +71,38 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
         handleEnd(e.clientX, e.clientY)
     }
 
-    // Touch event handlers
+    // Touch event handlers with improved handling
     const handleTouchStart = (e) => {
+        e.preventDefault();
         const touch = e.touches[0]
         handleStart(touch.clientX, touch.clientY)
     }
 
     const handleTouchMove = (e) => {
+        e.preventDefault();
+        if (!isDragging) return;
         const touch = e.touches[0]
         handleMove(touch.clientX, touch.clientY)
     }
 
     const handleTouchEnd = (e) => {
+        e.preventDefault();
         const touch = e.changedTouches[0]
-        handleEnd(touch.clientX, touch.clientY)
+        handleEnd(touch.clientX, touch.clientY, true)
+    }
+
+    // Add touch cancel handler
+    const handleTouchCancel = (e) => {
+        setIsDragging(false);
     }
 
     useEffect(() => {
         if (isDragging) {
             window.addEventListener('mousemove', handleMouseMove)
             window.addEventListener('mouseup', handleMouseUp)
-            window.addEventListener('touchmove', handleTouchMove, { passive: true })
+            window.addEventListener('touchmove', handleTouchMove, { passive: false })
             window.addEventListener('touchend', handleTouchEnd)
+            window.addEventListener('touchcancel', handleTouchCancel)
         }
 
         return () => {
@@ -95,6 +110,7 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
             window.removeEventListener('mouseup', handleMouseUp)
             window.removeEventListener('touchmove', handleTouchMove)
             window.removeEventListener('touchend', handleTouchEnd)
+            window.removeEventListener('touchcancel', handleTouchCancel)
         }
     }, [isDragging])
 
@@ -204,6 +220,9 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
             }}
             onMouseDown={handleMouseDown}
             onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchCancel}
         >
             <button
                 className={`vinyl-record ${isPlaying ? 'spinning' : ''}`}
