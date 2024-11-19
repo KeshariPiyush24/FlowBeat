@@ -19,6 +19,7 @@
     border: none;
     padding: 0;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
 }
 
 .vinyl-record::before {
@@ -27,20 +28,25 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 178px;
-    height: 178px;
+    width: 99%;
+    height: 99%;
     border-radius: 50%;
     background:
         repeating-radial-gradient(circle at center,
             rgba(0, 0, 0, 0.1) 0,
             rgba(0, 0, 0, 0.1) 1px,
             transparent 1px,
-            transparent 4px),
-        linear-gradient(45deg,
-            rgba(255, 255, 255, 0.05),
-            rgba(0, 0, 0, 0.05));
-    opacity: 0.6;
+            transparent 3px);
+    opacity: 0.4;
     pointer-events: none;
+    mask-image: radial-gradient(circle at center,
+            black 0%,
+            black 98%,
+            transparent 100%);
+    -webkit-mask-image: radial-gradient(circle at center,
+            black 0%,
+            black 98%,
+            transparent 100%);
 }
 
 .vinyl-record::after {
@@ -93,10 +99,5 @@
     .vinyl-record {
         width: 150px;
         height: 150px;
-    }
-
-    .vinyl-record::before {
-        width: 148px;
-        height: 148px;
     }
 }
