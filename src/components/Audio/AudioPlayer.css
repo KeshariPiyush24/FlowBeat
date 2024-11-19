@@ -6,6 +6,10 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    z-index: 1000;
 }
 
 .vinyl-record {
@@ -20,6 +24,7 @@
     padding: 0;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    z-index: 1000;
 }
 
 .vinyl-record::before {
@@ -100,4 +105,8 @@
         width: 150px;
         height: 150px;
     }
+}
+
+.audio-player:active {
+    cursor: grabbing;
 }

@@ -3,8 +3,52 @@ import './AudioPlayer.css'
 
 function AudioPlayer({ isPlaying: timerPlaying }) {
     const [isPlaying, setIsPlaying] = useState(false)
+    const [position, setPosition] = useState(() => {
+        const saved = localStorage.getItem('audioPlayerPosition')
+        return saved ? JSON.parse(saved) : { x: 0, y: 0 }
+    })
+    const [isDragging, setIsDragging] = useState(false)
+    const dragStart = useRef({ x: 0, y: 0 })
     const playerRef = useRef(null)
-    const MAIN_VIDEO_ID = 'jfKfPfyJRdk' // Lofi Girl Hip Hop stream ID
+    const MAIN_VIDEO_ID = 'jfKfPfyJRdk'
+
+    // Save position to localStorage when it changes
+    useEffect(() => {
+        localStorage.setItem('audioPlayerPosition', JSON.stringify(position))
+    }, [position])
+
+    const handleMouseDown = (e) => {
+        setIsDragging(true)
+        dragStart.current = {
+            x: e.clientX - position.x,
+            y: e.clientY - position.y
+        }
+    }
+
+    const handleMouseMove = (e) => {
+        if (!isDragging) return
+
+        setPosition({
+            x: e.clientX - dragStart.current.x,
+            y: e.clientY - dragStart.current.y
+        })
+    }
+
+    const handleMouseUp = () => {
+        setIsDragging(false)
+    }
+
+    useEffect(() => {
+        if (isDragging) {
+            window.addEventListener('mousemove', handleMouseMove)
+            window.addEventListener('mouseup', handleMouseUp)
+        }
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove)
+            window.removeEventListener('mouseup', handleMouseUp)
+        }
+    }, [isDragging])
 
     useEffect(() => {
         // Load YouTube IFrame API with HTTPS
@@ -70,7 +114,14 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
     }
 
     return (
-        <div className="audio-player">
+        <div
+            className="audio-player"
+            style={{
+                transform: `translate(${position.x}px, ${position.y}px)`,
+                cursor: isDragging ? 'grabbing' : 'grab'
+            }}
+            onMouseDown={handleMouseDown}
+        >
             <button
                 className={`vinyl-record ${isPlaying ? 'spinning' : ''}`}
                 onClick={handleTogglePlay}
