@@ -88,7 +88,6 @@ body.dark-mode .time-unit {
 .mode-button:hover {
     border-color: var(--color-primary);
     color: var(--color-primary);
-    transform: translateY(-2px);
 }
 
 .mode-button.active {
@@ -148,7 +147,6 @@ body.dark-mode .time-unit {
 }
 
 .control-button:hover {
-    transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(127, 90, 240, 0.4);
     filter: brightness(1.1);
 }
