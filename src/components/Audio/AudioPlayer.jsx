@@ -6,7 +6,7 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
     const playerRef = useRef(null)
 
     useEffect(() => {
-        // Load YouTube IFrame API
+        // Load YouTube IFrame API with HTTPS
         const tag = document.createElement('script')
         tag.src = 'https://www.youtube.com/iframe_api'
         const firstScriptTag = document.getElementsByTagName('script')[0]
