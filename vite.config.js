@@ -12,5 +12,16 @@ export default defineConfig({
         outDir: 'dist',
         minify: 'esbuild',
         sourcemap: true
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `
+                    :root {
+                        color-scheme: dark;
+                    }
+                `
+            }
+        }
     }
 }) 

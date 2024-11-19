@@ -17,6 +17,7 @@
   --transition-speed: 0.3s;
   --shadow-light: 0 4px 20px rgba(127, 90, 240, 0.1);
   --shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.2);
+  color-scheme: dark;
 }
 
 * {
@@ -30,8 +31,8 @@ body {
     Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-background-light);
-  color: var(--color-text-light);
+  background-color: #121212;
+  color: #ffffff;
   transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Container from './components/Layout/Container'
 import Timer from './components/Timer/Timer'
 import AudioPlayer from './components/Audio/AudioPlayer'
@@ -7,8 +7,13 @@ import ThemeToggle from './components/Theme/ThemeToggle'
 import './styles/App.css'
 
 function App() {
-    const [isDarkMode, setIsDarkMode] = useState(false)
+    const [isDarkMode, setIsDarkMode] = useState(true)
     const [isPlaying, setIsPlaying] = useState(false)
+
+    useEffect(() => {
+        document.body.classList.add('dark-mode')
+        document.documentElement.setAttribute('data-theme', 'dark')
+    }, [])
 
     const toggleTheme = () => {
         setIsDarkMode(!isDarkMode)
