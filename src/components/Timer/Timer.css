@@ -355,3 +355,196 @@ body.dark-mode .time-unit {
         padding: 15px;
     }
 }
+
+/* Tablet - Portrait Mode (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .digital-clock {
+        font-size: 4rem;
+        gap: 1rem;
+    }
+
+    .time-unit {
+        min-width: 120px;
+        padding: 1.5rem 2rem;
+    }
+
+    .timer-modes {
+        max-width: 90%;
+        gap: 1rem;
+    }
+
+    .mode-button {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
+        min-width: 110px;
+    }
+
+    .timer-controls {
+        flex-direction: row;
+        max-width: 90%;
+        gap: 1.5rem;
+    }
+
+    .control-button {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        width: auto;
+    }
+}
+
+/* Tablet - Landscape Mode (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .timer {
+        gap: 2rem;
+        padding: 1rem;
+    }
+
+    .digital-clock {
+        font-size: 4.5rem;
+        gap: 1.25rem;
+    }
+
+    .time-unit {
+        min-width: 150px;
+        padding: 2rem 2.5rem;
+    }
+
+    .timer-modes {
+        max-width: 80%;
+        gap: 1.25rem;
+    }
+
+    .mode-button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        min-width: 120px;
+    }
+
+    .timer-controls {
+        flex-direction: row;
+        max-width: 80%;
+        gap: 2rem;
+    }
+
+    .control-button {
+        padding: 1rem 2.5rem;
+        font-size: 1.2rem;
+    }
+}
+
+/* Large Tablets and Small Laptops (1024px - 1200px) */
+@media (min-width: 1024px) and (max-width: 1200px) {
+    .digital-clock {
+        font-size: 5rem;
+    }
+
+    .time-unit {
+        min-width: 160px;
+        padding: 2rem 3rem;
+    }
+}
+
+/* iPad Pro and Similar Large Tablets */
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .timer {
+        gap: 2.5rem;
+    }
+
+    .digital-clock {
+        font-size: 5.5rem;
+    }
+
+    .time-unit {
+        min-width: 180px;
+    }
+}
+
+/* Adjust for different aspect ratios */
+@media (max-aspect-ratio: 3/4) {
+    .timer {
+        gap: 2rem;
+    }
+
+    .digital-clock {
+        font-size: clamp(2.5rem, 8vw, 4.5rem);
+    }
+
+    .time-unit {
+        min-width: clamp(80px, 25vw, 150px);
+        padding: clamp(1rem, 3vw, 2rem);
+    }
+}
+
+/* Handle smaller heights in landscape mode */
+@media (max-height: 600px) and (orientation: landscape) {
+    .timer {
+        gap: 1.5rem;
+    }
+
+    .digital-clock {
+        font-size: 3rem;
+    }
+
+    .time-unit {
+        min-width: 100px;
+        padding: 1rem 1.5rem;
+    }
+
+    .timer-modes {
+        margin-bottom: 1rem;
+    }
+
+    .mode-button {
+        padding: 0.5rem 1rem;
+    }
+
+    .timer-controls {
+        margin-top: 1rem;
+    }
+
+    .control-button {
+        padding: 0.75rem 1.5rem;
+    }
+}
+
+/* Ensure minimum touch target sizes across all devices */
+.mode-button,
+.control-button {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+}
+
+/* Optimize for foldable devices */
+@media (max-width: 280px) {
+    .timer {
+        padding: 0.5rem;
+    }
+
+    .digital-clock {
+        font-size: 1.75rem;
+    }
+
+    .time-unit {
+        min-width: 55px;
+        padding: 0.5rem;
+    }
+}
+
+/* Add smooth transitions for better user experience */
+.time-unit,
+.mode-button,
+.control-button {
+    transition: all 0.3s ease;
+}
+
+/* Ensure content is centered and readable on ultra-wide screens */
+@media (min-width: 1920px) {
+    .timer {
+        max-width: 1400px;
+    }
+
+    .digital-clock {
+        font-size: 7rem;
+    }
+}
