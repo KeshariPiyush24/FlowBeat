@@ -9,20 +9,21 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
     })
     const [isDragging, setIsDragging] = useState(false)
     const dragStart = useRef({ x: 0, y: 0 })
+    const mouseDownPos = useRef({ x: 0, y: 0 })
     const playerRef = useRef(null)
     const MAIN_VIDEO_ID = 'jfKfPfyJRdk'
 
-    // Save position to localStorage when it changes
     useEffect(() => {
         localStorage.setItem('audioPlayerPosition', JSON.stringify(position))
     }, [position])
 
     const handleMouseDown = (e) => {
-        setIsDragging(true)
+        mouseDownPos.current = { x: e.clientX, y: e.clientY }
         dragStart.current = {
             x: e.clientX - position.x,
             y: e.clientY - position.y
         }
+        setIsDragging(true)
     }
 
     const handleMouseMove = (e) => {
@@ -34,7 +35,15 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
         })
     }
 
-    const handleMouseUp = () => {
+    const handleMouseUp = (e) => {
+        const dx = e.clientX - mouseDownPos.current.x
+        const dy = e.clientY - mouseDownPos.current.y
+        const distance = Math.sqrt(dx * dx + dy * dy)
+
+        if (distance < 5) {
+            handleTogglePlay()
+        }
+
         setIsDragging(false)
     }
 
@@ -124,7 +133,6 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
         >
             <button
                 className={`vinyl-record ${isPlaying ? 'spinning' : ''}`}
-                onClick={handleTogglePlay}
             />
             <div id="youtube-player" style={{ display: 'none' }} />
             <div className="track-info">
