@@ -16,6 +16,7 @@ function Timer({ onPlayPause }) {
     const [showCustom, setShowCustom] = useState(false)
     const [customTime, setCustomTime] = useState({ hours: 0, minutes: 0 })
     const audioRef = useRef(null)
+    const [isDragging, setIsDragging] = useState(false)
 
     const formatTime = (totalSeconds) => {
         const hours = Math.floor(totalSeconds / 3600)
@@ -126,62 +127,71 @@ function Timer({ onPlayPause }) {
         };
     }, []);
 
+    const handleTouchEnd = () => {
+        setIsDragging(false);
+    };
+
     return (
-        <div className="timer">
-            <div className="timer-modes">
-                {Object.entries(TIMER_PRESETS).map(([key, preset]) => (
-                    <button
-                        key={key}
-                        className={`mode-button ${timerMode === key ? 'active' : ''}`}
-                        onClick={() => handleModeChange(key)}
-                    >
-                        {preset.label}
+        <div
+            className="timer-container"
+            onTouchEnd={handleTouchEnd}
+        >
+            <div className="timer">
+                <div className="timer-modes">
+                    {Object.entries(TIMER_PRESETS).map(([key, preset]) => (
+                        <button
+                            key={key}
+                            className={`mode-button ${timerMode === key ? 'active' : ''}`}
+                            onClick={() => handleModeChange(key)}
+                        >
+                            {preset.label}
+                        </button>
+                    ))}
+                </div>
+
+                {showCustom ? (
+                    <div className="custom-time-input">
+                        <input
+                            type="number"
+                            placeholder="HH"
+                            min="0"
+                            max="99"
+                            className="no-spinners"
+                            onChange={e => setCustomTime({ ...customTime, hours: e.target.value })}
+                        />
+                        <input
+                            type="number"
+                            placeholder="MM"
+                            min="0"
+                            max="59"
+                            className="no-spinners"
+                            onChange={e => setCustomTime({ ...customTime, minutes: e.target.value })}
+                        />
+                    </div>
+                ) : (
+                    <div className="digital-clock">
+                        <span className="time-unit">{formattedTime.hours}</span>
+                        <span className="separator">:</span>
+                        <span className="time-unit">{formattedTime.minutes}</span>
+                        <span className="separator">:</span>
+                        <span className="time-unit">{formattedTime.seconds}</span>
+                    </div>
+                )}
+
+                <div className="timer-controls">
+                    <button className="control-button" onClick={toggleTimer}>
+                        {isActive ? 'Pause' : 'Start'}
                     </button>
-                ))}
-            </div>
-
-            {showCustom ? (
-                <div className="custom-time-input">
-                    <input
-                        type="number"
-                        placeholder="HH"
-                        min="0"
-                        max="99"
-                        className="no-spinners"
-                        onChange={e => setCustomTime({ ...customTime, hours: e.target.value })}
-                    />
-                    <input
-                        type="number"
-                        placeholder="MM"
-                        min="0"
-                        max="59"
-                        className="no-spinners"
-                        onChange={e => setCustomTime({ ...customTime, minutes: e.target.value })}
-                    />
+                    <button
+                        className="control-button reset"
+                        onClick={() => {
+                            setTime(TIMER_PRESETS.thirtyMin.time);
+                            setIsActive(false);
+                            setShowCustom(false);
+                            setTimerMode('thirtyMin');
+                        }}
+                    >Reset</button>
                 </div>
-            ) : (
-                <div className="digital-clock">
-                    <span className="time-unit">{formattedTime.hours}</span>
-                    <span className="separator">:</span>
-                    <span className="time-unit">{formattedTime.minutes}</span>
-                    <span className="separator">:</span>
-                    <span className="time-unit">{formattedTime.seconds}</span>
-                </div>
-            )}
-
-            <div className="timer-controls">
-                <button className="control-button" onClick={toggleTimer}>
-                    {isActive ? 'Pause' : 'Start'}
-                </button>
-                <button
-                    className="control-button reset"
-                    onClick={() => {
-                        setTime(TIMER_PRESETS.thirtyMin.time);
-                        setIsActive(false);
-                        setShowCustom(false);
-                        setTimerMode('thirtyMin');
-                    }}
-                >Reset</button>
             </div>
         </div>
     )

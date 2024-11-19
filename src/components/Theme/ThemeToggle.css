@@ -15,6 +15,9 @@
     transition: all var(--transition-speed);
     color: var(--color-primary);
     border-radius: 50%;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px;
 }
 
 .theme-toggle:hover {
@@ -24,4 +27,13 @@
 
 body.dark-mode .theme-toggle {
     background: var(--color-surface-dark);
+}
+
+@media (max-width: 768px) {
+    .theme-toggle {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        z-index: 1000;
+    }
 }

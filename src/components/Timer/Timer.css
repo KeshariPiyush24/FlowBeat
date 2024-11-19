@@ -215,3 +215,46 @@ body.dark-mode .time-unit {
         min-width: 100px;
     }
 }
+
+.timer-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    touch-action: none;
+}
+
+.timer-display {
+    font-size: clamp(2rem, 5vw, 3rem);
+}
+
+.timer-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 10px;
+}
+
+.timer-button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px 20px;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+@media (max-width: 768px) {
+    .timer-container {
+        padding: 10px;
+    }
+
+    .timer-controls {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .timer-display {
+        padding: 15px;
+    }
+}
