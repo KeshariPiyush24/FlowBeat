@@ -9,81 +9,77 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
     })
     const [isDragging, setIsDragging] = useState(false)
     const dragStart = useRef({ x: 0, y: 0 })
-    const touchStart = useRef({ x: 0, y: 0 })
+    const startPos = useRef({ x: 0, y: 0 })
     const playerRef = useRef(null)
     const MAIN_VIDEO_ID = 'jfKfPfyJRdk'
-    const [touchMoved, setTouchMoved] = useState(false)
+    const moveThreshold = 10 // pixels to consider as drag
 
     useEffect(() => {
         localStorage.setItem('audioPlayerPosition', JSON.stringify(position))
     }, [position])
 
-    // Mouse event handlers
-    const handleMouseDown = (e) => {
+    const handleStart = (clientX, clientY) => {
+        startPos.current = { x: clientX, y: clientY }
         dragStart.current = {
-            x: e.clientX - position.x,
-            y: e.clientY - position.y
-        }
-        touchStart.current = {
-            x: e.clientX,
-            y: e.clientY
+            x: clientX - position.x,
+            y: clientY - position.y
         }
         setIsDragging(true)
     }
 
-    const handleMouseMove = (e) => {
+    const handleMove = (clientX, clientY) => {
         if (!isDragging) return
 
-        setPosition({
-            x: e.clientX - dragStart.current.x,
-            y: e.clientY - dragStart.current.y
-        })
+        const deltaX = Math.abs(clientX - startPos.current.x)
+        const deltaY = Math.abs(clientY - startPos.current.y)
+
+        if (deltaX > moveThreshold || deltaY > moveThreshold) {
+            setPosition({
+                x: clientX - dragStart.current.x,
+                y: clientY - dragStart.current.y
+            })
+        }
     }
 
-    const handleMouseUp = (e) => {
+    const handleEnd = (clientX, clientY) => {
         if (isDragging) {
-            const dx = e.clientX - touchStart.current.x
-            const dy = e.clientY - touchStart.current.y
-            const distance = Math.sqrt(dx * dx + dy * dy)
+            const deltaX = Math.abs(clientX - startPos.current.x)
+            const deltaY = Math.abs(clientY - startPos.current.y)
 
-            if (distance < 5) {
+            if (deltaX < moveThreshold && deltaY < moveThreshold) {
                 handleTogglePlay()
             }
         }
         setIsDragging(false)
     }
 
-    // Updated touch event handlers
+    // Mouse event handlers
+    const handleMouseDown = (e) => {
+        handleStart(e.clientX, e.clientY)
+    }
+
+    const handleMouseMove = (e) => {
+        handleMove(e.clientX, e.clientY)
+    }
+
+    const handleMouseUp = (e) => {
+        handleEnd(e.clientX, e.clientY)
+    }
+
+    // Touch event handlers
     const handleTouchStart = (e) => {
         const touch = e.touches[0]
-        setTouchMoved(false)
-        dragStart.current = {
-            x: touch.clientX - position.x,
-            y: touch.clientY - position.y
-        }
-        touchStart.current = {
-            x: touch.clientX,
-            y: touch.clientY
-        }
-        setIsDragging(true)
+        handleStart(touch.clientX, touch.clientY)
     }
 
     const handleTouchMove = (e) => {
-        if (!isDragging) return
-        setTouchMoved(true)
         const touch = e.touches[0]
-        setPosition({
-            x: touch.clientX - dragStart.current.x,
-            y: touch.clientY - dragStart.current.y
-        })
+        handleMove(touch.clientX, touch.clientY)
     }
 
     const handleTouchEnd = (e) => {
-        setIsDragging(false)
-        if (!touchMoved) {
-            handleTogglePlay()
-        }
-        setTouchMoved(false)
+        const touch = e.changedTouches[0]
+        handleEnd(touch.clientX, touch.clientY)
     }
 
     useEffect(() => {
@@ -171,7 +167,7 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
                 height: window.innerHeight
             }
             const playerSize = {
-                width: 180,  // Match your CSS values
+                width: 180,
                 height: 180
             }
 
@@ -187,22 +183,13 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
         return () => window.removeEventListener('resize', checkBounds)
     }, [])
 
-    // Add this function to handle vinyl touch/click
-    const handleVinylInteraction = (e) => {
-        e.stopPropagation() // Prevent event bubbling to parent
-        if (!isDragging) {
-            handleTogglePlay()
-        }
-    }
-
     useEffect(() => {
-        // Handle ad blocker errors
         window.addEventListener('error', (e) => {
             if (e.target.src && (
                 e.target.src.includes('googleads') ||
                 e.target.src.includes('doubleclick.net')
             )) {
-                e.preventDefault()  // Prevent the error from showing in console
+                e.preventDefault()
             }
         }, true)
     }, [])
@@ -217,12 +204,9 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
             }}
             onMouseDown={handleMouseDown}
             onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
         >
             <button
                 className={`vinyl-record ${isPlaying ? 'spinning' : ''}`}
-                onClick={handleVinylInteraction}
             />
             <div id="youtube-player" style={{ display: 'none' }} />
             <div className="track-info">
