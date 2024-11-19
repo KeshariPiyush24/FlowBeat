@@ -1,6 +1,6 @@
 .app {
     min-height: 100vh;
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -107,4 +107,18 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Prevents horizontal scrollbar */
+}
+
+#root {
+    min-height: 100vh;
+    overflow: hidden;
+    /* Contains all content within viewport */
 }
