@@ -61,11 +61,22 @@
 
     .content-wrapper {
         padding: 0.5rem;
-        gap: 1.5rem;
+        gap: 1rem;
     }
 
     .main-section {
-        gap: 2rem;
+        gap: 1.5rem;
+        padding-top: 3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-wrapper {
+        padding: 0.25rem;
+    }
+
+    .main-section {
+        gap: 1rem;
     }
 }
 
