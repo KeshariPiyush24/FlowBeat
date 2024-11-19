@@ -17,5 +17,9 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "incognito": "split",
+  "background": {
+    "persistent": true
+  }
 } 
