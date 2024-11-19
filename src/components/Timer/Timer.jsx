@@ -36,6 +36,7 @@ function Timer({ onPlayPause }) {
             setShowCustom(true)
             return
         }
+        setShowCustom(false)
         if (mode === 'infinity') {
             setTime(359999)
         } else {
@@ -133,16 +134,26 @@ function Timer({ onPlayPause }) {
     return (
         <div className="timer">
             <div className="timer-modes">
-                <button className={`mode-button ${timerMode === '30' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('30')}>30m</button>
-                <button className={`mode-button ${timerMode === '60' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('60')}>60m</button>
-                <button className={`mode-button ${timerMode === '100' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('100')}>100m</button>
-                <button className={`mode-button ${timerMode === 'infinity' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('infinity')}>∞</button>
-                <button className={`mode-button ${timerMode === 'custom' ? 'active' : ''}`}
-                    onClick={() => handleModeChange('custom')}>Custom</button>
+                <button
+                    className={`mode-button ${timerMode === '30' ? 'active' : ''}`}
+                    onClick={() => handleModeChange('30')}
+                >30m</button>
+                <button
+                    className={`mode-button ${timerMode === '60' ? 'active' : ''}`}
+                    onClick={() => handleModeChange('60')}
+                >60m</button>
+                <button
+                    className={`mode-button ${timerMode === '100' ? 'active' : ''}`}
+                    onClick={() => handleModeChange('100')}
+                >100m</button>
+                <button
+                    className={`mode-button ${timerMode === 'infinity' ? 'active' : ''}`}
+                    onClick={() => handleModeChange('infinity')}
+                >∞</button>
+                <button
+                    className={`mode-button ${timerMode === 'custom' && !showCustom ? 'active' : ''}`}
+                    onClick={() => handleModeChange('custom')}
+                >Custom</button>
             </div>
 
             {showCustom ? (
@@ -178,7 +189,15 @@ function Timer({ onPlayPause }) {
                 <button className="control-button" onClick={toggleTimer}>
                     {isActive ? 'Pause' : 'Start'}
                 </button>
-                <button className="control-button reset" onClick={() => setTime(30 * 60)}>Reset</button>
+                <button
+                    className="control-button reset"
+                    onClick={() => {
+                        setTime(30 * 60);
+                        setIsActive(false);
+                        setShowCustom(false);
+                        setTimerMode('30');
+                    }}
+                >Reset</button>
             </div>
         </div>
     )
