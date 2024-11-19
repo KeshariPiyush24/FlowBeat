@@ -36,18 +36,14 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
             <button
                 className={`vinyl-record ${isPlaying ? 'spinning' : ''}`}
                 onClick={togglePlay}
-            >
-                <div className="vinyl-label">
-                    <span>{tracks[currentTrack].title}</span>
-                </div>
-            </button>
+            />
             <audio
                 ref={audioRef}
                 src={tracks[currentTrack].url}
                 onEnded={() => setCurrentTrack((prev) => (prev + 1) % tracks.length)}
             />
             <div className="track-info">
-                <span>Now Playing: {tracks[currentTrack].title}</span>
+                <span>{tracks[currentTrack].title}</span>
             </div>
         </div>
     )
