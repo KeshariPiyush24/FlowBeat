@@ -2,7 +2,7 @@
   --color-primary: #7F5AF0;
   --color-primary-dark: #6B47D6;
   --color-secondary: #72757E;
-  --color-background-light: #FAFAFA;
+  --color-background-light: #F4F6FA;
   --color-text-light: #2B2C34;
   --color-surface-light: #FFFFFF;
   --color-background-dark: #16161A;
@@ -12,8 +12,11 @@
   --color-error: #FF6B6B;
   --color-warning: #FF8E3C;
   --gradient-primary: linear-gradient(135deg, #7F5AF0, #6B47D6);
-  --gradient-surface: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
+  --gradient-surface-light: linear-gradient(145deg, #FFFFFF, #F8FAFF);
+  --gradient-surface-dark: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0));
   --transition-speed: 0.3s;
+  --shadow-light: 0 4px 20px rgba(127, 90, 240, 0.1);
+  --shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 * {
