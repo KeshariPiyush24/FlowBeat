@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    background: transparent;
+    background: var(--color-surface-dark);
     border: none;
     cursor: pointer;
     z-index: 1000;
