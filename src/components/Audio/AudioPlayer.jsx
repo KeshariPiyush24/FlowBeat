@@ -1,32 +1,69 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './AudioPlayer.css'
 
 function AudioPlayer({ isPlaying: timerPlaying }) {
     const [isPlaying, setIsPlaying] = useState(false)
-    const [currentTrack, setCurrentTrack] = useState(0)
-    const audioRef = useRef(null)
-
-    const tracks = [
-        { title: 'Lofi Study', url: '/assets/lofi-tracks/study.mp3' },
-        { title: 'Chill Beats', url: '/assets/lofi-tracks/chill.mp3' },
-        { title: 'Focus Mode', url: '/assets/lofi-tracks/focus.mp3' }
-    ]
+    const playerRef = useRef(null)
 
     useEffect(() => {
-        if (timerPlaying) {
-            audioRef.current.play()
-            setIsPlaying(true)
-        } else {
-            audioRef.current.pause()
-            setIsPlaying(false)
+        // Load YouTube IFrame API
+        const tag = document.createElement('script')
+        tag.src = 'https://www.youtube.com/iframe_api'
+        const firstScriptTag = document.getElementsByTagName('script')[0]
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag)
+
+        window.onYouTubeIframeAPIReady = () => {
+            playerRef.current = new window.YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: 'jfKfPfyJRdk', // Lofi Girl live stream ID
+                playerVars: {
+                    autoplay: 0,
+                    controls: 0,
+                    disablekb: 1,
+                    fs: 0,
+                    modestbranding: 1,
+                    playsinline: 1
+                },
+                events: {
+                    onReady: (event) => {
+                        if (timerPlaying) {
+                            event.target.playVideo()
+                            setIsPlaying(true)
+                        }
+                    },
+                    onStateChange: (event) => {
+                        // Update isPlaying based on player state
+                        setIsPlaying(event.data === window.YT.PlayerState.PLAYING)
+                    }
+                }
+            })
+        }
+
+        return () => {
+            if (playerRef.current) {
+                playerRef.current.destroy()
+            }
+        }
+    }, [])
+
+    useEffect(() => {
+        if (playerRef.current && playerRef.current.getPlayerState) {
+            if (timerPlaying) {
+                playerRef.current.playVideo()
+            } else {
+                playerRef.current.pauseVideo()
+            }
         }
     }, [timerPlaying])
 
-    const togglePlay = () => {
+    const handleTogglePlay = () => {
+        if (!playerRef.current || !playerRef.current.getPlayerState) return
+
         if (isPlaying) {
-            audioRef.current.pause()
+            playerRef.current.pauseVideo()
         } else {
-            audioRef.current.play()
+            playerRef.current.playVideo()
         }
         setIsPlaying(!isPlaying)
     }
@@ -35,15 +72,11 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
         <div className="audio-player">
             <button
                 className={`vinyl-record ${isPlaying ? 'spinning' : ''}`}
-                onClick={togglePlay}
+                onClick={handleTogglePlay}
             />
-            <audio
-                ref={audioRef}
-                src={tracks[currentTrack].url}
-                onEnded={() => setCurrentTrack((prev) => (prev + 1) % tracks.length)}
-            />
+            <div id="youtube-player" style={{ display: 'none' }} />
             <div className="track-info">
-                <span>{tracks[currentTrack].title}</span>
+                <span>Lofi Girl Radio</span>
             </div>
         </div>
     )
