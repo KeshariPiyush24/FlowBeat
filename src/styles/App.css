@@ -58,27 +58,28 @@
 
 @media (max-width: 768px) {
     .app {
-        padding: 0.5rem;
+        padding: 1rem;
     }
 
     .content-wrapper {
-        padding: 0.5rem;
-        gap: 1rem;
+        padding: 1rem;
+        gap: 1.5rem;
     }
 
     .main-section {
-        gap: 1.5rem;
-        padding-top: 3rem;
+        gap: 2rem;
+        padding: 3rem 1rem;
     }
 }
 
 @media (max-width: 480px) {
     .content-wrapper {
-        padding: 0.25rem;
+        padding: 1rem;
     }
 
     .main-section {
-        gap: 1rem;
+        gap: 1.5rem;
+        padding: 2rem 1rem;
     }
 }
 
