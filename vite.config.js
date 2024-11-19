@@ -9,9 +9,9 @@ export default defineConfig({
             registerType: 'autoUpdate',
             includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
             manifest: {
-                name: 'Meditation Timer',
-                short_name: 'MedTimer',
-                description: 'A peaceful meditation timer application',
+                name: 'FlowBeat - Hustle Harder, Lofi Louder!',
+                short_name: 'FlowBeat',
+                description: 'FlowBeat is a lofi radio that plays hip hop beats. It\'s the perfect background music for studying, working, or just relaxing.',
                 theme_color: '#ffffff',
                 icons: [
                     {
