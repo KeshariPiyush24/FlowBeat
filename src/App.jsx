@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Container from './components/Layout/Container'
 import Timer from './components/Timer/Timer'
 import AudioPlayer from './components/Audio/AudioPlayer'
@@ -26,6 +26,10 @@ function App() {
         setIsPlaying(isActive)
     }
 
+    const handleQuoteLoaded = useCallback(() => {
+        setIsLoading(false)
+    }, [])
+
     return (
         <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
             <ThemeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
@@ -33,7 +37,7 @@ function App() {
                 <div className="main-section">
                     <Timer onPlayPause={handlePlayPause} />
                     <div className="quote-section">
-                        <Quote onLoaded={() => setIsLoading(false)} />
+                        <Quote onLoaded={handleQuoteLoaded} />
                         {isLoading && <LoadingText />}
                     </div>
                 </div>

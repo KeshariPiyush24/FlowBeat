@@ -47,7 +47,7 @@ function Quote({ onLoaded }) {
         // Fetch new quote every 30 minutes (1800000 milliseconds)
         const interval = setInterval(fetchQuote, 1800000)
         return () => clearInterval(interval)
-    }, [onLoaded])
+    }, [])
 
     return (
         <div className="quote">
