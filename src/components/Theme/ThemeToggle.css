@@ -4,13 +4,18 @@
     right: 1rem;
     padding: 0.5rem;
     font-size: 1.5rem;
-    background: none;
+    background: var(--color-surface-light);
     border: none;
     cursor: pointer;
     z-index: 1000;
     transition: transform var(--transition-speed);
+    color: var(--color-primary);
 }
 
 .theme-toggle:hover {
     transform: scale(1.1);
+}
+
+body.dark-mode .theme-toggle {
+    background: var(--color-surface-dark);
 }

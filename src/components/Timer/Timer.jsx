@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import './Timer.css'
 
 function Timer({ onPlayPause }) {
@@ -7,6 +7,7 @@ function Timer({ onPlayPause }) {
     const [timerMode, setTimerMode] = useState('30')
     const [showCustom, setShowCustom] = useState(false)
     const [customTime, setCustomTime] = useState({ hours: 0, minutes: 0 })
+    const audioRef = useRef(null)
 
     const formatTime = (totalSeconds) => {
         const hours = Math.floor(totalSeconds / 3600)
@@ -61,6 +62,73 @@ function Timer({ onPlayPause }) {
     }
 
     const formattedTime = formatTime(time)
+
+    const handleTimerComplete = () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+        }
+
+        setIsActive(false);
+        setTime(0);
+
+        switch (timerMode) {
+            case '30':
+                setTime(30 * 60);
+                break;
+            case '60':
+                setTime(60 * 60);
+                break;
+            case '100':
+                setTime(100 * 60);
+                break;
+            case 'custom':
+                const totalSeconds =
+                    (parseInt(customTime.hours || 0) * 3600) +
+                    (parseInt(customTime.minutes || 0) * 60);
+                setTime(totalSeconds);
+                break;
+            default:
+                setTime(30 * 60);
+        }
+
+        if (Notification.permission === 'granted') {
+            new Notification('Timer Complete!', {
+                body: 'Time to take a break!',
+            });
+        }
+    };
+
+    useEffect(() => {
+        let interval;
+        if (isActive && time > 0) {
+            interval = setInterval(() => {
+                setTime(prevTime => {
+                    if (prevTime <= 1) {
+                        handleTimerComplete();
+                        clearInterval(interval);
+                        return 0;
+                    }
+                    return prevTime - 1;
+                });
+            }, 1000);
+        }
+
+        return () => {
+            if (interval) {
+                clearInterval(interval);
+            }
+        };
+    }, [isActive, timerMode]);
+
+    useEffect(() => {
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current.currentTime = 0;
+            }
+        };
+    }, []);
 
     return (
         <div className="timer">
