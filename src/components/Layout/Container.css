@@ -1,0 +1,16 @@
+.main-container {
+    width: 100%;
+    max-width: 1024px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        padding: 1rem;
+    }
+}

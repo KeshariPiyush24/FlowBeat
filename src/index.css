@@ -1,0 +1,46 @@
+:root {
+  --color-primary: #60A5FA;
+  --color-primary-dark: #2563EB;
+  --color-background-light: #FFFFFF;
+  --color-background-dark: #1A1A1A;
+  --color-text-light: #333333;
+  --color-text-dark: #FFFFFF;
+  --transition-speed: 0.3s;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-background-light);
+  color: var(--color-text-light);
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+body.dark-mode {
+  background-color: var(--color-background-dark);
+  color: var(--color-text-dark);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@keyframes flip {
+  0% { transform: rotateX(0); }
+  100% { transform: rotateX(180deg); }
+}
+
+.flip-animation {
+  animation: flip 0.6s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+} 

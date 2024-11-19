@@ -1,0 +1,45 @@
+.quote {
+    position: relative;
+    text-align: center;
+    padding: 1rem;
+    max-width: 800px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.quote-text {
+    font-size: 1.5rem;
+    font-weight: 300;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.5px;
+    font-family: 'Georgia', serif;
+}
+
+.quote-author {
+    font-size: 1rem;
+    color: var(--color-primary);
+    font-style: italic;
+    opacity: 0.9;
+    letter-spacing: 1px;
+}
+
+.dark-mode .quote-text {
+    color: var(--color-text-dark);
+}
+
+@media (max-width: 768px) {
+    .quote {
+        padding: 0.5rem;
+        width: 95%;
+    }
+
+    .quote-text {
+        font-size: 1.2rem;
+    }
+
+    .quote-author {
+        font-size: 0.9rem;
+    }
+}
