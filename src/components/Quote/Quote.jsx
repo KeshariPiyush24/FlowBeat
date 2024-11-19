@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './Quote.css'
 
-function Quote() {
+function Quote({ onLoaded }) {
     const [quote, setQuote] = useState('')
     const [author, setAuthor] = useState('')
 
@@ -25,6 +25,7 @@ function Quote() {
             const [data] = await response.json()
             setQuote(data.quote)
             setAuthor(data.author)
+            onLoaded()
         } catch (error) {
             console.error('Error fetching quote:', error)
             // Fallback motivational quotes if API fails
@@ -37,6 +38,7 @@ function Quote() {
             const randomQuote = fallbackQuotes[Math.floor(Math.random() * fallbackQuotes.length)]
             setQuote(randomQuote.quote)
             setAuthor(randomQuote.author)
+            onLoaded()
         }
     }
 
@@ -45,7 +47,7 @@ function Quote() {
         // Fetch new quote every 30 minutes (1800000 milliseconds)
         const interval = setInterval(fetchQuote, 1800000)
         return () => clearInterval(interval)
-    }, [])
+    }, [onLoaded])
 
     return (
         <div className="quote">

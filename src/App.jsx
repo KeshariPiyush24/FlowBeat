@@ -4,11 +4,13 @@ import Timer from './components/Timer/Timer'
 import AudioPlayer from './components/Audio/AudioPlayer'
 import Quote from './components/Quote/Quote'
 import ThemeToggle from './components/Theme/ThemeToggle'
+import LoadingText from './components/Loading/LoadingText'
 import './styles/App.css'
 
 function App() {
     const [isDarkMode, setIsDarkMode] = useState(true)
     const [isPlaying, setIsPlaying] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         document.body.classList.add('dark-mode')
@@ -30,7 +32,10 @@ function App() {
             <div className="content-wrapper">
                 <div className="main-section">
                     <Timer onPlayPause={handlePlayPause} />
-                    <Quote />
+                    <div className="quote-section">
+                        <Quote onLoaded={() => setIsLoading(false)} />
+                        {isLoading && <LoadingText />}
+                    </div>
                 </div>
                 <AudioPlayer isPlaying={isPlaying} />
             </div>
