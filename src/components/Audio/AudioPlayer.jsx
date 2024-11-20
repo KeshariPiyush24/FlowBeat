@@ -137,15 +137,34 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
                     enablejsapi: 1,
                     rel: 0,
                     loop: 1,
-                    playlist: MAIN_VIDEO_ID // Required for looping
+                    playlist: MAIN_VIDEO_ID,
+                    // Premium-specific parameters
+                    premium: 1,
+                    iv_load_policy: 3, // Disable annotations
+                    widget_referrer: window.location.href
                 },
                 events: {
-                    onReady: (event) => {
-                        // Set volume to a comfortable level
+                    onReady: async (event) => {
                         event.target.setVolume(70);
-                        if (timerPlaying) {
-                            event.target.playVideo()
-                            setIsPlaying(true)
+
+                        // Check if user has Premium
+                        try {
+                            const isPremium = await checkPremiumStatus();
+                            if (isPremium) {
+                                // Enable background playback for Premium users
+                                document.addEventListener('visibilitychange', () => {
+                                    if (document.hidden && isPlaying) {
+                                        event.target.playVideo();
+                                    }
+                                });
+                            }
+
+                            if (timerPlaying) {
+                                event.target.playVideo();
+                                setIsPlaying(true);
+                            }
+                        } catch (error) {
+                            console.error('Error checking Premium status:', error);
                         }
                     },
                     onStateChange: (event) => {
@@ -168,6 +187,16 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
                 }
             })
         }
+
+        // Function to check Premium status
+        const checkPremiumStatus = async () => {
+            if (playerRef.current && playerRef.current.getOptions) {
+                const features = await playerRef.current.getOptions();
+                // Premium users have access to additional features
+                return features.includes('premium');
+            }
+            return false;
+        };
 
         return () => {
             if (playerRef.current) {
