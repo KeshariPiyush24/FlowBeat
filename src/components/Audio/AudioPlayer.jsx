@@ -115,6 +115,7 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
     }, [isDragging])
 
     useEffect(() => {
+        // Load YouTube API
         const tag = document.createElement('script')
         tag.src = 'https://www.youtube.com/iframe_api'
         const firstScriptTag = document.getElementsByTagName('script')[0]
@@ -131,17 +132,38 @@ function AudioPlayer({ isPlaying: timerPlaying }) {
                     disablekb: 1,
                     fs: 0,
                     modestbranding: 1,
-                    playsinline: 1
+                    playsinline: 1,
+                    origin: window.location.origin,
+                    enablejsapi: 1,
+                    rel: 0,
+                    loop: 1,
+                    playlist: MAIN_VIDEO_ID // Required for looping
                 },
                 events: {
                     onReady: (event) => {
+                        // Set volume to a comfortable level
+                        event.target.setVolume(70);
                         if (timerPlaying) {
                             event.target.playVideo()
                             setIsPlaying(true)
                         }
                     },
                     onStateChange: (event) => {
-                        setIsPlaying(event.data === window.YT.PlayerState.PLAYING)
+                        if (event.data === window.YT.PlayerState.PLAYING) {
+                            setIsPlaying(true);
+                        } else if (event.data === window.YT.PlayerState.PAUSED) {
+                            setIsPlaying(false);
+                        } else if (event.data === window.YT.PlayerState.ENDED) {
+                            // Automatically replay when ended
+                            event.target.playVideo();
+                        }
+                    },
+                    onError: (event) => {
+                        console.error('YouTube Player Error:', event.data);
+                        // Attempt to recover from errors
+                        if (playerRef.current) {
+                            playerRef.current.playVideo();
+                        }
                     }
                 }
             })
