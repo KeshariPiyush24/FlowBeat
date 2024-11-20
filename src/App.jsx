@@ -5,6 +5,7 @@ import AudioPlayer from './components/Audio/AudioPlayer'
 import Quote from './components/Quote/Quote'
 import ThemeToggle from './components/Theme/ThemeToggle'
 import LoadingText from './components/Loading/LoadingText'
+import InstallButton from './components/PWA/InstallButton'
 import './styles/App.css'
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
     return (
         <div className={`app ${isDarkMode ? 'dark-mode' : ''}`}>
             <ThemeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
+            <InstallButton />
             <div className="content-wrapper">
                 <div className="main-section">
                     <Timer onPlayPause={handlePlayPause} />
