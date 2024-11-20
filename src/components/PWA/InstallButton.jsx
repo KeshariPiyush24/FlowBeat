@@ -36,7 +36,7 @@ function InstallButton() {
             onClick={handleClick}
             aria-label="Install app"
         >
-            ⬇️
+            ↓
         </button>
     )
 }

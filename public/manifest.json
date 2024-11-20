@@ -39,6 +39,7 @@
   "categories": ["music", "entertainment"],
   "prefer_related_applications": false,
   "orientation": "landscape",
+  "display_override": ["window-controls-overlay"],
   "incognito": "split",
   "background": {
     "persistent": true
